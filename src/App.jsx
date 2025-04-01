@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -6,38 +6,34 @@ import './App.css'
 import Title from "./components/Title"
 import Image from "./components/Image"
 
+import JobTitle from "./components/JobTitle"
+import CompanyName from "./components/CompanyName"
+import Card from "./components/Card"
+
 function App() {
-  const users = [
-    {
-      id: 1,
-      name: "Jerome",
-      picture: "https://randomuser.me/api/portraits/men/37.jpg"
-    },
-    {
-      id: 2,
-      name: "Max",
-      picture: "https://randomuser.me/api/portraits/men/38.jpg"
-    },
-    {
-      id: 3,
-      name: "Karl",
-      picture: "https://randomuser.me/api/portraits/men/39.jpg"
-    },
-    {
-      id: 4,
-      name: "Tim",
-      picture: "https://randomuser.me/api/portraits/men/40.jpg"
+  const [userData, setUserData] = useState([])
+
+  useEffect(() => {
+    async function getData() {
+      const res = await fetch("../data.json")
+      const data = await res.json()
+
+      setUserData(data)
     }
-  ]
+
+    getData()
+  }, [])
+
+  console.log(userData)
 
   return (
     <main>
       {
-        users.map(user => (
-          <div key={user.id}>
-            <Image imgAlt={user.name} imgSrc={user.picture} />
-            <Title name={user.name} />
-          </div>
+        userData.map(user => (
+          <Card key={user.id}>
+            <CompanyName name={user.company} />
+            <JobTitle jobTitle={user.position} />
+          </Card>
         ))
       }
     </main>
